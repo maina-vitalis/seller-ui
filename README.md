@@ -1,21 +1,50 @@
-# React + TypeScript + Vite + shadcn/ui
+# Seller UI
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+Seller-facing React app for shop management.
 
-## Adding components
+## Auth and redirect flow
 
-To add components to your app, run the following command:
+1. Customer app handles login.
+2. Customer app redirects here with a token query param: `?token=...`.
+3. Seller UI stores the token, removes it from the URL, loads current user, and checks `isSeller`.
+4. If `isSeller` is true, the seller dashboard loads.
+5. Otherwise, the user is prompted to return to customer onboarding/auth.
 
-```bash
-npx shadcn@latest add button
+## Feature-based folder structure
+
+```text
+src/
+	features/
+		auth/
+			api/
+			hooks/
+			lib/
+			types.ts
+		seller/
+			api/
+			components/
+			hooks/
+			types.ts
+	shared/
+		api/
+			config.ts
+			http-client.ts
 ```
 
-This will place the ui components in the `src/components` directory.
+## API configuration
 
-## Using components
+Set these env vars in `.env`:
 
-To use the components in your app, import them as follows:
+```bash
+VITE_API_BASE_URL=http://localhost:3000/api
+VITE_CUSTOMER_AUTH_URL=http://localhost:5173/auth
+```
 
-```tsx
-import { Button } from "@/components/ui/button"
+## Scripts
+
+```bash
+npm run dev
+npm run typecheck
+npm run lint
+npm run build
 ```

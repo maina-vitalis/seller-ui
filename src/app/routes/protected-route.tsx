@@ -1,21 +1,23 @@
+import { Outlet } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
-import { SellerDashboard } from "@/features/seller/components/seller-dashboard"
+import { SellerLayout } from "@/shared/layouts/seller-layout"
 import { apiConfig } from "@/shared/api/config"
 
-export function App() {
-  const session = useAuthSession()
+export function ProtectedRoute() {
+  const { user, isLoading, isAuthenticated, error } = useAuthSession()
+  console.log(user, isAuthenticated)
 
-  if (session.isLoading) {
+  if (isLoading) {
     return <CenteredMessage title="Checking your session..." />
   }
 
-  if (!session.isAuthenticated || !session.user) {
+  if (!isAuthenticated || !user) {
     return (
       <CenteredMessage
         title="Seller session required"
         description={
-          session.error ??
+          error ??
           "Please login from the customer app. Once you are authenticated as a seller, you will be redirected here."
         }
         actionLabel="Go to customer auth"
@@ -24,7 +26,7 @@ export function App() {
     )
   }
 
-  if (session.user.role !== "VENDOR") {
+  if (user.role !== "VENDOR") {
     return (
       <CenteredMessage
         title="Seller access not enabled"
@@ -35,7 +37,11 @@ export function App() {
     )
   }
 
-  return <SellerDashboard user={session.user} />
+  return (
+    <SellerLayout user={user}>
+      <Outlet />
+    </SellerLayout>
+  )
 }
 
 type CenteredMessageProps = {
@@ -73,7 +79,5 @@ function CenteredMessage({
 }
 
 function redirectToCustomerAuth() {
-  globalThis.location.href = apiConfig.customerAuthUrl
+  window.location.href = apiConfig.customerAuthUrl
 }
-
-export default App
