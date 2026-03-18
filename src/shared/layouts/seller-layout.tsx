@@ -1,4 +1,5 @@
-import { ReactNode } from "react"
+import type { ReactNode } from "react"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { SellerSidebar } from "./seller-sidebar"
 import { SellerTopbar } from "./seller-topbar"
 import type { UserProfile } from "@/features/auth/types"
@@ -10,14 +11,12 @@ type SellerLayoutProps = {
 
 export function SellerLayout({ user, children }: SellerLayoutProps) {
   return (
-    <div className="flex min-h-screen bg-background">
+    <SidebarProvider>
       <SellerSidebar />
-      <div className="flex-1 flex flex-col">
+      <SidebarInset>
         <SellerTopbar user={user} />
-        <main className="flex-1 p-6">
-          {children}
-        </main>
-      </div>
-    </div>
+        <div className="flex flex-1 flex-col gap-4 p-6">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

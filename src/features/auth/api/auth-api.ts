@@ -17,7 +17,6 @@ export const authApi = baseApi.injectEndpoints({
         url: "/users/me",
         method: "GET",
       }),
-      // transformResponse: (response: CurrentUserResponse) => response.user,
       providesTags: ["Auth"],
     }),
 

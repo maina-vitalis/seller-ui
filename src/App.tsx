@@ -1,79 +1,8 @@
-import { Button } from "@/components/ui/button"
-import { useAuthSession } from "@/features/auth/hooks/use-auth-session"
-import { SellerDashboard } from "@/features/seller/components/seller-dashboard"
-import { apiConfig } from "@/shared/api/config"
+import { RouterProvider } from "react-router-dom"
+import { router } from "@/app/routes"
 
 export function App() {
-  const session = useAuthSession()
-
-  if (session.isLoading) {
-    return <CenteredMessage title="Checking your session..." />
-  }
-
-  if (!session.isAuthenticated || !session.user) {
-    return (
-      <CenteredMessage
-        title="Seller session required"
-        description={
-          session.error ??
-          "Please login from the customer app. Once you are authenticated as a seller, you will be redirected here."
-        }
-        actionLabel="Go to customer auth"
-        onAction={redirectToCustomerAuth}
-      />
-    )
-  }
-
-  if (session.user.role !== "VENDOR") {
-    return (
-      <CenteredMessage
-        title="Seller access not enabled"
-        description="Your account is authenticated, but seller access is not active yet. Contact support or complete seller onboarding in the customer app."
-        actionLabel="Return to customer app"
-        onAction={redirectToCustomerAuth}
-      />
-    )
-  }
-
-  return <SellerDashboard user={session.user} />
-}
-
-type CenteredMessageProps = {
-  title: string
-  description?: string
-  actionLabel?: string
-  onAction?: () => void
-}
-
-function CenteredMessage({
-  title,
-  description,
-  actionLabel,
-  onAction,
-}: Readonly<CenteredMessageProps>) {
-  return (
-    <main className="flex min-h-svh items-center justify-center p-6">
-      <section className="w-full max-w-xl rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
-        <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
-          {title}
-        </h1>
-        {description ? (
-          <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-muted-foreground">
-            {description}
-          </p>
-        ) : null}
-        {actionLabel && onAction ? (
-          <Button className="mt-6" onClick={onAction}>
-            {actionLabel}
-          </Button>
-        ) : null}
-      </section>
-    </main>
-  )
-}
-
-function redirectToCustomerAuth() {
-  globalThis.location.href = apiConfig.customerAuthUrl
+  return <RouterProvider router={router} />
 }
 
 export default App

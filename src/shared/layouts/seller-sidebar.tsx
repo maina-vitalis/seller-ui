@@ -1,51 +1,80 @@
-import { NavLink } from "react-router-dom"
-import { 
-  LayoutDashboard, 
-  Package, 
-  ShoppingCart, 
-  DollarSign, 
-  Settings, 
-  User 
+import { NavLink, useLocation } from "react-router-dom"
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Wallet,
+  Settings,
+  Store,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@/components/ui/sidebar"
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Products", href: "/products", icon: Package },
-  { name: "Orders", href: "/orders", icon: ShoppingCart },
-  { name: "Payouts", href: "/payouts", icon: DollarSign },
-  { name: "Store Settings", href: "/settings", icon: Settings },
-  { name: "Account", href: "/account", icon: User },
+const navItems = [
+  { label: "Overview", href: "/", icon: LayoutDashboard },
+  { label: "Products", href: "/products", icon: Package },
+  { label: "Orders", href: "/orders", icon: ShoppingCart },
+  { label: "Payouts", href: "/payouts", icon: Wallet },
+  { label: "Settings", href: "/settings", icon: Settings },
 ]
 
 export function SellerSidebar() {
+  const location = useLocation()
+
   return (
-    <aside className="w-64 bg-card border-r border-border">
-      <div className="p-6">
-        <h2 className="text-lg font-semibold">Seller Portal</h2>
-      </div>
-      <nav className="px-3 pb-6">
-        <ul className="space-y-1">
-          {navigation.map((item) => (
-            <li key={item.name}>
-              <NavLink
-                to={item.href}
-                className={({ isActive }) =>
-                  cn(
-                    "flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",
-                    isActive
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  )
-                }
-              >
-                <item.icon className="h-4 w-4" />
-                {item.name}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </aside>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="p-4">
+        <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Store className="h-4 w-4" />
+          </div>
+          <span className="text-sm font-semibold group-data-[collapsible=icon]:hidden">
+            Seller Portal
+          </span>
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={
+                      item.href === "/"
+                        ? location.pathname === "/"
+                        : location.pathname.startsWith(item.href)
+                    }
+                    tooltip={item.label}
+                  >
+                    <NavLink to={item.href}>
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter />
+      <SidebarRail />
+    </Sidebar>
   )
 }
