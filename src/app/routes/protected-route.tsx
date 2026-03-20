@@ -24,6 +24,8 @@ export function ProtectedRoute() {
     )
   }
 
+  console.log(user)
+
   if (user.role !== "VENDOR") {
     return (
       <AuthGate
@@ -45,7 +47,12 @@ type AuthGateProps = {
   onAction?: () => void
 }
 
-function AuthGate({ title, description, actionLabel, onAction }: Readonly<AuthGateProps>) {
+function AuthGate({
+  title,
+  description,
+  actionLabel,
+  onAction,
+}: Readonly<AuthGateProps>) {
   return (
     <main className="flex min-h-svh items-center justify-center p-6">
       <section className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
@@ -66,5 +73,5 @@ function AuthGate({ title, description, actionLabel, onAction }: Readonly<AuthGa
 }
 
 function redirectToCustomerAuth() {
-  window.location.href = apiConfig.customerAuthUrl
+  globalThis.location.href = apiConfig.customerAuthUrl
 }

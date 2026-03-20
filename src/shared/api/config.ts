@@ -1,5 +1,5 @@
-const DEFAULT_API_BASE_URL = "http://localhost:3000/api"
-const DEFAULT_CUSTOMER_AUTH_URL = "http://localhost:5173/auth"
+const DEFAULT_API_BASE_URL = "http://localhost:5000/api"
+const DEFAULT_CUSTOMER_AUTH_URL = "http://localhost:3173"
 
 export const apiConfig = {
   baseUrl: import.meta.env.VITE_API_BASE_URL ?? DEFAULT_API_BASE_URL,

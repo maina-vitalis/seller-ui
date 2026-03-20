@@ -9,7 +9,7 @@ type SellerLayoutProps = {
   children: ReactNode
 }
 
-export function SellerLayout({ user, children }: SellerLayoutProps) {
+export function SellerLayout({ user, children }: Readonly<SellerLayoutProps>) {
   return (
     <SidebarProvider>
       <SellerSidebar />
