@@ -24,8 +24,6 @@ export function ProtectedRoute() {
     )
   }
 
-  console.log(user)
-
   if (user.role !== "VENDOR") {
     return (
       <AuthGate
@@ -55,7 +53,7 @@ function AuthGate({
 }: Readonly<AuthGateProps>) {
   return (
     <main className="flex min-h-svh items-center justify-center p-6">
-      <section className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
+      <section className="w-full max-w-md border border-border bg-card p-8 text-center shadow-sm">
         <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
         {description && (
           <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
@@ -63,7 +61,7 @@ function AuthGate({
           </p>
         )}
         {actionLabel && onAction && (
-          <Button className="mt-6" onClick={onAction}>
+          <Button className="mt-6 rounded-none" onClick={onAction}>
             {actionLabel}
           </Button>
         )}
