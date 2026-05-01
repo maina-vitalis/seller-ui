@@ -24,7 +24,9 @@ export function ProtectedRoute() {
     )
   }
 
-  if (user.role !== "VENDOR") {
+  const isVendor = user.role.some((r) => r.role === "VENDOR")
+
+  if (user && !isVendor) {
     return (
       <AuthGate
         title="Seller access not enabled"

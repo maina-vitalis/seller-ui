@@ -2,7 +2,11 @@ export type UserProfile = {
   id: string
   email: string
   name: string
-  role: "BUYER" | "VENDOR" | "ADMIN"
+  role: [
+    {
+      role: "BUYER" | "VENDOR" | "ADMIN"
+    },
+  ]
 }
 
 export type AuthSessionState = {
