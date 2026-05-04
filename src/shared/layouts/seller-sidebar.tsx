@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { NavLink, useLocation } from "react-router-dom"
 import {
   LayoutDashboard,
@@ -5,7 +6,6 @@ import {
   ShoppingCart,
   Wallet,
   Settings,
-  Store,
 } from "lucide-react"
 import {
   Sidebar,
@@ -20,6 +20,24 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
+import { useGetAllStoresQuery } from "@/features/seller/api/seller-api"
+import { setActiveStore } from "@/features/seller/storeSlice"
+import { useAppDispatch, useAppSelector } from "../store"
 
 const navItems = [
   { label: "Overview", href: "/", icon: LayoutDashboard },
@@ -31,18 +49,68 @@ const navItems = [
 
 export function SellerSidebar() {
   const location = useLocation()
+  const { isError, data, isLoading } = useGetAllStoresQuery()
+  const [open, setOpen] = useState(false)
+  const activeStore = useAppSelector((state) => state.activeStore.activeStoreId)
+  const dispatch = useAppDispatch()
+
+  const stores = data?.store ?? []
+  const selectedStore =
+    stores.find((store) => store.id === activeStore) ?? stores[0]
+
+  //function to handle the store change
+  function handleStoreChange(id: string) {
+    dispatch(setActiveStore(id))
+  }
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="p-4">
-        <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Store className="h-4 w-4" />
-          </div>
-          <span className="text-sm font-semibold group-data-[collapsible=icon]:hidden">
-            Seller Portal
-          </span>
-        </div>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild disabled={isLoading || isError}>
+            <Button
+              variant="outline"
+              className="w-full justify-between bg-sidebar-accent/50"
+            >
+              <div className="flex min-w-0 flex-col items-start gap-0.5 text-left">
+                <span className="truncate font-medium">
+                  {isLoading
+                    ? "Loading stores..."
+                    : (selectedStore?.storeName ?? "Select a store")}
+                </span>
+              </div>
+            </Button>
+          </PopoverTrigger>
+
+          <PopoverContent
+            className="w-[--radix-popover-trigger-width] p-0"
+            align="start"
+          >
+            <Command className="w-full">
+              <CommandInput placeholder="Search stores..." />
+              <CommandList>
+                <CommandEmpty>
+                  {stores.length > 0
+                    ? "No stores match your search."
+                    : "No stores found."}
+                </CommandEmpty>
+                <CommandGroup>
+                  {stores.map((store) => (
+                    <CommandItem
+                      key={store.id}
+                      value={`${store.storeName} ${store.businessType}`}
+                      onSelect={() => handleStoreChange(store.id)}
+                    >
+                      <div className="flex flex-col items-start gap-0.5">
+                        <span className="font-medium">{store.storeName}</span>
+                      </div>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
       </SidebarHeader>
 
       <SidebarContent>

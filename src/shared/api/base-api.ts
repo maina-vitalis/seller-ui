@@ -53,6 +53,6 @@ const axiosBaseQuery = (): BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["Auth", "SellerOverview"],
+  tagTypes: ["Auth", "SellerOverview", "VendorStores"],
   endpoints: () => ({}),
 })

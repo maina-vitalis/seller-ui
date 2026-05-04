@@ -1,5 +1,5 @@
 import { requestJson } from "@/shared/api/http-client"
-import type { SellerOverview } from "@/features/seller/types"
+import type { SellerOverview, SellerStores } from "@/features/seller/types"
 import { baseApi } from "@/shared/api/base-api"
 import { mockSellerOverview } from "./mock-data"
 
@@ -13,10 +13,19 @@ export const sellerApi = baseApi.injectEndpoints({
       },
       providesTags: ["SellerOverview"],
     }),
+
+    getAllStores: builder.query<SellerStores, void>({
+      query: () => ({
+        url: "/vendor-store",
+        method: "GET",
+      }),
+
+      providesTags: ["VendorStores"],
+    }),
   }),
 })
 
-export const { useGetSellerOverviewQuery } = sellerApi
+export const { useGetSellerOverviewQuery, useGetAllStoresQuery } = sellerApi
 
 export async function fetchSellerOverview(
   signal?: AbortSignal
