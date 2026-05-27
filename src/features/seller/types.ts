@@ -31,14 +31,3 @@ export interface Store {
   createdAt: string // Use Date if you plan to parse it immediately
   updatedAt: string
 }
-
-export interface SellerStores {
-  id: string
-  userId: string
-  description: string | null
-  isVerified: boolean
-  KYCUrl: string | null
-  createdAt: string
-  updatedAt: string
-  store: Store[]
-}

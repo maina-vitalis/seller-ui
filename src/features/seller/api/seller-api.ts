@@ -1,5 +1,5 @@
 import { requestJson } from "@/shared/api/http-client"
-import type { SellerOverview, SellerStores } from "@/features/seller/types"
+import type { SellerOverview, Store } from "@/features/seller/types"
 import { baseApi } from "@/shared/api/base-api"
 import { mockSellerOverview } from "./mock-data"
 
@@ -14,7 +14,7 @@ export const sellerApi = baseApi.injectEndpoints({
       providesTags: ["SellerOverview"],
     }),
 
-    getAllStores: builder.query<SellerStores, void>({
+    getAllStores: builder.query<Store[], void>({
       query: () => ({
         url: "/vendor-store",
         method: "GET",

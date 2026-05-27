@@ -54,7 +54,8 @@ export function SellerSidebar() {
   const activeStore = useAppSelector((state) => state.activeStore.activeStoreId)
   const dispatch = useAppDispatch()
 
-  const stores = data?.store ?? []
+  const stores = data || []
+
   const selectedStore =
     stores.find((store) => store.id === activeStore) ?? stores[0]
 
