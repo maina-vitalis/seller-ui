@@ -5,7 +5,6 @@ import { ArrowUpDown, Plus } from "lucide-react"
 import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { getProducts } from "@/features/products/api/products-storage"
 import type { Product } from "@/features/products/types"
 
 function formatPrice(value: number) {

@@ -21,6 +21,7 @@ import {
   type ProductFormValues,
 } from "@/features/products/product-schema"
 import { ProductInventoryCard } from "../components/product-inventory-card"
+import { useCreateProductMutation } from "../api/products-api"
 
 function generateSlug(name: string) {
   return name
@@ -66,6 +67,8 @@ export function AddProductPage() {
   })
 
   const [tagInput, setTagInput] = React.useState("")
+
+  const {} = useCreateProductMutation()
 
   /* auto-generate slug from name */
   const name = useWatch({ control: form.control, name: "name" })
