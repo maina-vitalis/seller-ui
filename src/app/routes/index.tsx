@@ -4,10 +4,12 @@ import { SellerRoot } from "./seller-root"
 import { OverviewPage } from "@/features/seller/pages/overview-page"
 import { ProductsPage } from "@/features/products/pages/products-page"
 import { AddProductPage } from "@/features/products/pages/add-product-page"
+import { RouteErrorPage } from "./route-error"
 
 export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
+    errorElement: <RouteErrorPage />,
     children: [
       {
         element: <SellerRoot />,

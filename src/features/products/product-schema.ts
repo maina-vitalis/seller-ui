@@ -42,7 +42,7 @@ export const productFormSchema = z
     tags: z.array(z.string()),
 
     /* status */
-    status: z.enum(["active", "draft", "archived"]),
+    status: z.enum(["ACTIVE", "DRAFT", "ARCHIVED"]),
 
     /* media */
     images: z.array(productImageSchema),
@@ -54,22 +54,40 @@ export const productFormSchema = z
       .refine((val) => !Number.isNaN(Number(val)) && Number(val) > 0, {
         message: "Price must be a positive number",
       }),
-    compareAtPrice: z.string(),
-    costPerItem: z.string(),
+    compareAtPrice: z.coerce.number("Compare price must be a number"),
+    costPerItem: z.coerce.number("Cost per item must be a number"),
 
     /* inventory */
-    stock: z.string(),
-    lowStockThreshold: z.string(),
-    trackInventory: z.boolean(),
+    stock: z.coerce.number().int(),
+    lowStockThreshold: z.coerce.number(),
+    trackInventory: z.preprocess(
+      (val) => {
+        if (typeof val === "string") {
+          if (val.toLowerCase() === "false") return false
+          if (val.toUpperCase() === "true") return true
+        }
+        return val
+      },
+      z.boolean({ message: "Must be a boolean or a 'true'/'false' string" })
+    ),
 
     /* shipping */
-    requiresShipping: z.boolean(),
+    requiresShipping: z.preprocess(
+      (val) => {
+        if (typeof val === "string") {
+          if (val.toLowerCase() === "false") return false
+          if (val.toUpperCase() === "true") return true
+        }
+        return val
+      },
+      z.boolean({ message: "Must be a boolean or a 'true'/'false' string" })
+    ),
     weight: z.string(),
-    weightUnit: z.enum(["kg", "g", "lb", "oz"]),
-    length: z.string(),
-    width: z.string(),
-    height: z.string(),
-    dimensionUnit: z.enum(["cm", "in"]),
+    weightUnit: z.enum(["KG", "G", "LB", "OZ"]),
+    length: z.coerce.number("Please enter a valid number"),
+    width: z.coerce.number("Please enter a valid number"),
+    height: z.coerce.number("Please enter a valid number"),
+    dimensionUnit: z.enum(["CM", "IN"]),
 
     /* variants */
     variantOptions: z.array(productVariantOptionSchema),
@@ -98,7 +116,7 @@ export const productFormSchema = z
   .refine(
     (data) => {
       if (data.trackInventory) {
-        return data.stock.length > 0 && !Number.isNaN(Number(data.stock))
+        return data.stock > 0 && !Number.isNaN(Number(data.stock))
       }
       return true
     },
@@ -108,4 +126,6 @@ export const productFormSchema = z
     }
   )
 
-export type ProductFormValues = z.infer<typeof productFormSchema>
+export type ProductFormInput = z.input<typeof productFormSchema>
+export type ProductFormValues = z.output<typeof productFormSchema>
+export type ProductType = z.infer<typeof productFormSchema>

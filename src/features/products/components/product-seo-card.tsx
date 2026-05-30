@@ -9,22 +9,38 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { SectionIcon } from "@/features/products/components/section-icon"
 import type { UseFormReturn } from "react-hook-form"
 import type { ProductFormValues } from "@/features/products/product-schema"
 
-type Props = { form: UseFormReturn<ProductFormValues> }
+type Props = {
+  form: UseFormReturn<ProductFormValues>
+}
 
 export function ProductSeoCard({ form }: Props) {
   const name = useWatch({ control: form.control, name: "name" })
-  const shortDescription = useWatch({ control: form.control, name: "shortDescription" })
+  const shortDescription = useWatch({
+    control: form.control,
+    name: "shortDescription",
+  })
   const seoTitle = useWatch({ control: form.control, name: "seoTitle" })
-  const seoDescription = useWatch({ control: form.control, name: "seoDescription" })
+  const seoDescription = useWatch({
+    control: form.control,
+    name: "seoDescription",
+  })
   const seoSlug = useWatch({ control: form.control, name: "seoSlug" })
 
   const titlePreview = seoTitle || name || "Product Title"
-  const descPreview = seoDescription || shortDescription || "Product description will appear here..."
+  const descPreview =
+    seoDescription ||
+    shortDescription ||
+    "Product description will appear here..."
   const slugPreview = seoSlug || "product-url-slug"
 
   return (
@@ -42,14 +58,18 @@ export function ProductSeoCard({ form }: Props) {
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="rounded-lg border bg-muted/20 p-4">
-          <p className="mb-0.5 text-xs text-muted-foreground">Search engine preview</p>
+          <p className="mb-0.5 text-xs text-muted-foreground">
+            Search engine preview
+          </p>
           <p className="truncate text-base font-medium text-blue-600 dark:text-blue-400">
             {titlePreview}
           </p>
           <p className="text-xs text-emerald-700 dark:text-emerald-400">
             yourstore.com/products/{slugPreview}
           </p>
-          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{descPreview}</p>
+          <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+            {descPreview}
+          </p>
         </div>
 
         <FieldGroup>
@@ -81,7 +101,9 @@ export function ProductSeoCard({ form }: Props) {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="seoDescription">Meta Description</FieldLabel>
+                <FieldLabel htmlFor="seoDescription">
+                  Meta Description
+                </FieldLabel>
                 <Textarea
                   {...field}
                   id="seoDescription"
@@ -113,7 +135,9 @@ export function ProductSeoCard({ form }: Props) {
                     {...field}
                     id="seoSlug"
                     onChange={(e) =>
-                      field.onChange(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-"))
+                      field.onChange(
+                        e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-")
+                      )
                     }
                     placeholder="product-url-handle"
                     className="font-mono text-xs"

@@ -1,4 +1,4 @@
-export type ProductStatus = "active" | "draft" | "archived"
+export type ProductStatus = "ACTIVE" | "DRAFT" | "ARCHIVED"
 
 export type ProductImage = {
   id: string
@@ -35,11 +35,11 @@ export type Product = {
   shortDescription?: string
   images: ProductImage[]
   weight?: number
-  weightUnit: "kg" | "g" | "lb" | "oz"
+  weightUnit: "KG" | "G" | "LB" | "OZ"
   length?: number
   width?: number
   height?: number
-  dimensionUnit: "cm" | "in"
+  dimensionUnit: "CM" | "IN"
   requiresShipping: boolean
   seoTitle?: string
   seoDescription?: string

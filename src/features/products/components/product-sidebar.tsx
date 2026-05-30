@@ -13,12 +13,19 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import type { UseFormReturn } from "react-hook-form"
 import type { ProductFormValues } from "@/features/products/product-schema"
 import type { ProductStatus } from "@/features/products/types"
 
-type FormProp = { form: UseFormReturn<ProductFormValues> }
+type FormProp = {
+  form: UseFormReturn<ProductFormValues>
+}
 
 const CATEGORIES = [
   "Electronics",
@@ -57,19 +64,19 @@ export function ProductStatusCard({ form }: FormProp) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">
+                  <SelectItem value="ACTIVE">
                     <div className="flex items-center gap-2">
                       <span className="size-2 rounded-full bg-emerald-500" />
                       Active
                     </div>
                   </SelectItem>
-                  <SelectItem value="draft">
+                  <SelectItem value="DRAFT">
                     <div className="flex items-center gap-2">
                       <span className="size-2 rounded-full bg-amber-500" />
                       Draft
                     </div>
                   </SelectItem>
-                  <SelectItem value="archived">
+                  <SelectItem value="ARCHIVED">
                     <div className="flex items-center gap-2">
                       <span className="size-2 rounded-full bg-gray-400" />
                       Archived
@@ -78,9 +85,11 @@ export function ProductStatusCard({ form }: FormProp) {
                 </SelectContent>
               </Select>
               <p className="mt-2 text-xs text-muted-foreground">
-                {field.value === "active" && "Product will be visible in your store."}
-                {field.value === "draft" && "Product is hidden from customers."}
-                {field.value === "archived" && "Product is hidden and won't appear in admin lists."}
+                {field.value === "ACTIVE" &&
+                  "Product will be visible in your store."}
+                {field.value === "DRAFT" && "Product is hidden from customers."}
+                {field.value === "ARCHIVED" &&
+                  "Product is hidden and won't appear in admin lists."}
               </p>
             </>
           )}
@@ -113,7 +122,11 @@ export function ProductOrganizationCard({
                   Category <span className="text-destructive">*</span>
                 </FieldLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id="category" className="w-full" aria-invalid={fieldState.invalid}>
+                  <SelectTrigger
+                    id="category"
+                    className="w-full"
+                    aria-invalid={fieldState.invalid}
+                  >
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -124,7 +137,9 @@ export function ProductOrganizationCard({
                     ))}
                   </SelectContent>
                 </Select>
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
               </Field>
             )}
           />
@@ -161,7 +176,11 @@ export function ProductOrganizationCard({
                   e.preventDefault()
                   addTag()
                 }
-                if (e.key === "Backspace" && !tagInput && field.value.length > 0) {
+                if (
+                  e.key === "Backspace" &&
+                  !tagInput &&
+                  field.value.length > 0
+                ) {
                   removeTag(field.value[field.value.length - 1])
                 }
               }
@@ -172,9 +191,13 @@ export function ProductOrganizationCard({
                     <Tags className="mr-1 inline size-3.5" />
                     Tags
                   </FieldLabel>
-                  <div className="flex min-h-[38px] flex-wrap items-center gap-1.5 rounded-md border bg-background px-2.5 py-1.5 transition-colors focus-within:ring-2 focus-within:ring-ring/50">
+                  <div className="flex min-h-9.5 flex-wrap items-center gap-1.5 rounded-md border bg-background px-2.5 py-1.5 transition-colors focus-within:ring-2 focus-within:ring-ring/50">
                     {field.value.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="gap-1 pr-1">
+                      <Badge
+                        key={tag}
+                        variant="secondary"
+                        className="gap-1 pr-1"
+                      >
                         {tag}
                         <button
                           type="button"
@@ -187,8 +210,12 @@ export function ProductOrganizationCard({
                     ))}
                     <input
                       type="text"
-                      className="min-w-[80px] flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
-                      placeholder={field.value.length === 0 ? "Type and press Enter..." : "Add more..."}
+                      className="min-w-20 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/60"
+                      placeholder={
+                        field.value.length === 0
+                          ? "Type and press Enter..."
+                          : "Add more..."
+                      }
                       value={tagInput}
                       onChange={(e) => onTagInputChange(e.target.value)}
                       onKeyDown={handleKeyDown}
@@ -196,7 +223,8 @@ export function ProductOrganizationCard({
                     />
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Press Enter to add. Tags improve store search &amp; filtering.
+                    Press Enter to add. Tags improve store search &amp;
+                    filtering.
                   </p>
                 </Field>
               )
@@ -230,7 +258,11 @@ export function ProductFlagsCard({ form }: FormProp) {
                   Show on homepage &amp; featured sections.
                 </p>
               </div>
-              <Switch id="isFeatured" checked={field.value} onCheckedChange={field.onChange} />
+              <Switch
+                id="isFeatured"
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
             </div>
           )}
         />
@@ -273,7 +305,10 @@ export function ProductSummaryCard({ form }: FormProp) {
   const price = useWatch({ control: form.control, name: "price" })
   const stock = useWatch({ control: form.control, name: "stock" })
   const images = useWatch({ control: form.control, name: "images" })
-  const status = useWatch({ control: form.control, name: "status" }) as ProductStatus
+  const status = useWatch({
+    control: form.control,
+    name: "status",
+  }) as ProductStatus
 
   return (
     <Card className="border-dashed">
@@ -284,12 +319,14 @@ export function ProductSummaryCard({ form }: FormProp) {
         <dl className="space-y-2 text-sm">
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Name</dt>
-            <dd className="max-w-[180px] truncate font-medium">{name || "—"}</dd>
+            <dd className="max-w-45 truncate font-medium">{name || "—"}</dd>
           </div>
           <Separator />
           <div className="flex justify-between">
             <dt className="text-muted-foreground">Price</dt>
-            <dd className="font-medium">{price ? `${Number(price).toFixed(2)}` : "—"}</dd>
+            <dd className="font-medium">
+              {price ? `${Number(price).toFixed(2)}` : "—"}
+            </dd>
           </div>
           <Separator />
           <div className="flex justify-between">
@@ -307,7 +344,11 @@ export function ProductSummaryCard({ form }: FormProp) {
             <dd>
               <Badge
                 variant={
-                  status === "active" ? "default" : status === "draft" ? "secondary" : "outline"
+                  status === "ACTIVE"
+                    ? "default"
+                    : status === "DRAFT"
+                      ? "secondary"
+                      : "outline"
                 }
               >
                 {status.charAt(0).toUpperCase() + status.slice(1)}

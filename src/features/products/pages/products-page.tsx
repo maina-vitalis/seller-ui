@@ -1,4 +1,3 @@
-import * as React from "react"
 import { Link } from "react-router-dom"
 import { type ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Plus } from "lucide-react"
@@ -71,11 +70,11 @@ const columns: Array<ColumnDef<Product>> = [
     cell: ({ row }) => {
       const status = row.original.status
 
-      if (status === "active") {
+      if (status === "ACTIVE") {
         return <Badge variant="default">Active</Badge>
       }
 
-      if (status === "draft") {
+      if (status === "DRAFT") {
         return <Badge variant="secondary">Draft</Badge>
       }
 
@@ -101,21 +100,6 @@ const columns: Array<ColumnDef<Product>> = [
 ]
 
 export function ProductsPage() {
-  const [products, setProducts] = React.useState<Array<Product>>(() =>
-    getProducts()
-  )
-
-  React.useEffect(() => {
-    setProducts(getProducts())
-
-    const syncFromStorage = () => setProducts(getProducts())
-    globalThis.addEventListener("storage", syncFromStorage)
-
-    return () => {
-      globalThis.removeEventListener("storage", syncFromStorage)
-    }
-  }, [])
-
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
@@ -136,7 +120,7 @@ export function ProductsPage() {
 
       <DataTable
         columns={columns}
-        data={products}
+        data={[]}
         filterColumnId="name"
         filterPlaceholder="Search product by name..."
         noResultsLabel="No products found. Add your first product to get started."

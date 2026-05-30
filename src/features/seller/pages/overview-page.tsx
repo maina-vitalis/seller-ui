@@ -1,7 +1,10 @@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import { useSellerOverview } from "@/features/seller/hooks/use-seller-overview"
-import { OverviewStats, OverviewStatsSkeleton } from "../components/overview-stats"
+import {
+  OverviewStats,
+  OverviewStatsSkeleton,
+} from "../components/overview-stats"
 import {
   RecentOrdersTable,
   RecentOrdersTableSkeleton,
@@ -9,6 +12,8 @@ import {
 
 export function OverviewPage() {
   const { isLoading, data, error } = useSellerOverview()
+
+  console.log(isLoading)
 
   return (
     <div className="space-y-6">

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm, useWatch, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { ProductGeneralInfoCard } from "@/features/products/components/product-general-info-card"
@@ -22,6 +22,7 @@ import {
 } from "@/features/products/product-schema"
 import { ProductInventoryCard } from "../components/product-inventory-card"
 import { useCreateProductMutation } from "../api/products-api"
+import { toFormData } from "axios"
 
 function generateSlug(name: string) {
   return name
@@ -32,7 +33,7 @@ function generateSlug(name: string) {
 
 export function AddProductPage() {
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productFormSchema),
+    resolver: zodResolver(productFormSchema) as Resolver<ProductFormValues>,
     defaultValues: {
       name: "",
       shortDescription: "",
@@ -41,22 +42,22 @@ export function AddProductPage() {
       barcode: "",
       category: "",
       brand: "",
-      status: "draft",
+      status: "DRAFT",
       tags: [],
       images: [],
       price: "",
-      compareAtPrice: "",
-      costPerItem: "",
-      stock: "",
-      lowStockThreshold: "",
+      compareAtPrice: 0,
+      costPerItem: 0,
+      stock: 0,
+      lowStockThreshold: 0,
       trackInventory: true,
       requiresShipping: true,
       weight: "",
-      weightUnit: "kg",
-      length: "",
-      width: "",
-      height: "",
-      dimensionUnit: "cm",
+      weightUnit: "KG",
+      length: 0,
+      width: 0,
+      height: 0,
+      dimensionUnit: "CM",
       variantOptions: [],
       seoTitle: "",
       seoDescription: "",
@@ -68,7 +69,8 @@ export function AddProductPage() {
 
   const [tagInput, setTagInput] = React.useState("")
 
-  const {} = useCreateProductMutation()
+  const [createProduct] = useCreateProductMutation()
+  const activeStoreId = localStorage.getItem("activeStoreId")
 
   /* auto-generate slug from name */
   const name = useWatch({ control: form.control, name: "name" })
@@ -87,6 +89,10 @@ export function AddProductPage() {
   })
 
   function onSubmit(data: ProductFormValues) {
+    const productFormData = toFormData({ ...data, storeId: activeStoreId })
+
+    console.log(productFormData)
+    createProduct(productFormData)
     console.log("✅ Validated product data:", data)
   }
 
@@ -121,13 +127,13 @@ export function AddProductPage() {
             <Button
               type="submit"
               variant="outline"
-              onClick={() => form.setValue("status", "draft")}
+              onClick={() => form.setValue("status", "DRAFT")}
             >
               Save as Draft
             </Button>
             <Button
               type="submit"
-              onClick={() => form.setValue("status", "active")}
+              onClick={() => form.setValue("status", "ACTIVE")}
             >
               Publish Product
             </Button>
@@ -187,13 +193,13 @@ export function AddProductPage() {
             <Button
               type="submit"
               variant="outline"
-              onClick={() => form.setValue("status", "draft")}
+              onClick={() => form.setValue("status", "DRAFT")}
             >
               Save Draft
             </Button>
             <Button
               type="submit"
-              onClick={() => form.setValue("status", "active")}
+              onClick={() => form.setValue("status", "ACTIVE")}
             >
               Publish Product
             </Button>

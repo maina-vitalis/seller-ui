@@ -21,7 +21,9 @@ import { FieldHint } from "@/features/products/components/field-hint"
 import type { UseFormReturn } from "react-hook-form"
 import type { ProductFormValues } from "@/features/products/product-schema"
 
-type Props = { form: UseFormReturn<ProductFormValues> }
+type Props = {
+  form: UseFormReturn<ProductFormValues>
+}
 
 export function ProductInventoryCard({ form }: Readonly<Props>) {
   const trackInventory = useWatch({
@@ -137,7 +139,7 @@ export function ProductInventoryCard({ form }: Readonly<Props>) {
               name="lowStockThreshold"
               control={form.control}
               render={({ field }) => (
-                <Field className="max-w-[220px]">
+                <Field className="max-w-55">
                   <FieldLabel htmlFor="lowStockThreshold">
                     Low Stock Alert Threshold
                     <FieldHint>

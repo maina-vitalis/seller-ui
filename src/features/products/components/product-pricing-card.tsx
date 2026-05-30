@@ -10,7 +10,12 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { SectionIcon } from "@/features/products/components/section-icon"
 import { FieldHint } from "@/features/products/components/field-hint"
 import type { UseFormReturn } from "react-hook-form"
@@ -23,7 +28,7 @@ type ProductPricingCardProps = {
 function ProfitMarginIndicator({
   price,
   cost,
-}: Readonly<{ price: string; cost: string }>) {
+}: Readonly<{ price: string; cost: number }>) {
   const p = Number(price)
   const c = Number(cost)
   if (!p || !c || p <= 0 || c <= 0) return null
@@ -45,7 +50,9 @@ function ProfitMarginIndicator({
   )
 }
 
-export function ProductPricingCard({ form }: Readonly<ProductPricingCardProps>) {
+export function ProductPricingCard({
+  form,
+}: Readonly<ProductPricingCardProps>) {
   const price = useWatch({ control: form.control, name: "price" })
   const costPerItem = useWatch({ control: form.control, name: "costPerItem" })
 
@@ -71,7 +78,9 @@ export function ProductPricingCard({ form }: Readonly<ProductPricingCardProps>) 
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="price">
                   Price <span className="text-destructive">*</span>
-                  <FieldHint>The price customers will pay at checkout.</FieldHint>
+                  <FieldHint>
+                    The price customers will pay at checkout.
+                  </FieldHint>
                 </FieldLabel>
                 <div className="relative">
                   <span className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-muted-foreground">
@@ -102,7 +111,9 @@ export function ProductPricingCard({ form }: Readonly<ProductPricingCardProps>) 
               <Field>
                 <FieldLabel htmlFor="compareAtPrice">
                   Compare-at Price
-                  <FieldHint>The original price to show as crossed out (for sales).</FieldHint>
+                  <FieldHint>
+                    The original price to show as crossed out (for sales).
+                  </FieldHint>
                 </FieldLabel>
                 <div className="relative">
                   <span className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-muted-foreground">
@@ -130,7 +141,8 @@ export function ProductPricingCard({ form }: Readonly<ProductPricingCardProps>) 
                 <FieldLabel htmlFor="costPerItem">
                   Cost per Item
                   <FieldHint>
-                    Your cost/COGS. Used to calculate profit margin. Not shown to customers.
+                    Your cost/COGS. Used to calculate profit margin. Not shown
+                    to customers.
                   </FieldHint>
                 </FieldLabel>
                 <div className="relative">

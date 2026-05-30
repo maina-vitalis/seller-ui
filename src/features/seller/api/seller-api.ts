@@ -1,4 +1,4 @@
-import { requestJson } from "@/shared/api/http-client"
+  import { requestJson } from "@/shared/api/http-client"
 import type { SellerOverview, Store } from "@/features/seller/types"
 import { baseApi } from "@/shared/api/base-api"
 

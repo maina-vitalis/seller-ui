@@ -22,10 +22,15 @@ import { SectionIcon } from "@/features/products/components/section-icon"
 import type { UseFormReturn } from "react-hook-form"
 import type { ProductFormValues } from "@/features/products/product-schema"
 
-type Props = { form: UseFormReturn<ProductFormValues> }
+type Props = {
+  form: UseFormReturn<ProductFormValues>
+}
 
 export function ProductShippingCard({ form }: Props) {
-  const requiresShipping = useWatch({ control: form.control, name: "requiresShipping" })
+  const requiresShipping = useWatch({
+    control: form.control,
+    name: "requiresShipping",
+  })
 
   return (
     <Card>
@@ -96,10 +101,10 @@ export function ProductShippingCard({ form }: Props) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="kg">Kilograms (kg)</SelectItem>
-                        <SelectItem value="g">Grams (g)</SelectItem>
-                        <SelectItem value="lb">Pounds (lb)</SelectItem>
-                        <SelectItem value="oz">Ounces (oz)</SelectItem>
+                        <SelectItem value="KG">Kilograms (KG)</SelectItem>
+                        <SelectItem value="G">Grams (G)</SelectItem>
+                        <SelectItem value="LB">Pounds (LB)</SelectItem>
+                        <SelectItem value="OZ">Ounces (OZ)</SelectItem>
                       </SelectContent>
                     </Select>
                   </Field>
@@ -109,7 +114,9 @@ export function ProductShippingCard({ form }: Props) {
 
             <div>
               <div className="mb-3 flex items-center justify-between">
-                <FieldLabel className="text-sm">Dimensions (L × W × H)</FieldLabel>
+                <FieldLabel className="text-sm">
+                  Dimensions (L × W × H)
+                </FieldLabel>
                 <Controller
                   name="dimensionUnit"
                   control={form.control}
@@ -119,8 +126,8 @@ export function ProductShippingCard({ form }: Props) {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="cm">cm</SelectItem>
-                        <SelectItem value="in">in</SelectItem>
+                        <SelectItem value="CM">CM</SelectItem>
+                        <SelectItem value="IN">IN</SelectItem>
                       </SelectContent>
                     </Select>
                   )}
@@ -131,21 +138,39 @@ export function ProductShippingCard({ form }: Props) {
                   name="length"
                   control={form.control}
                   render={({ field }) => (
-                    <Input {...field} type="number" min={0} step="0.1" placeholder="Length" />
+                    <Input
+                      {...field}
+                      type="number"
+                      min={0}
+                      step="0.1"
+                      placeholder="Length"
+                    />
                   )}
                 />
                 <Controller
                   name="width"
                   control={form.control}
                   render={({ field }) => (
-                    <Input {...field} type="number" min={0} step="0.1" placeholder="Width" />
+                    <Input
+                      {...field}
+                      type="number"
+                      min={0}
+                      step="0.1"
+                      placeholder="Width"
+                    />
                   )}
                 />
                 <Controller
                   name="height"
                   control={form.control}
                   render={({ field }) => (
-                    <Input {...field} type="number" min={0} step="0.1" placeholder="Height" />
+                    <Input
+                      {...field}
+                      type="number"
+                      min={0}
+                      step="0.1"
+                      placeholder="Height"
+                    />
                   )}
                 />
               </div>

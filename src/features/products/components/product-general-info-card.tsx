@@ -20,7 +20,9 @@ import { SectionIcon } from "@/features/products/components/section-icon"
 import type { UseFormReturn } from "react-hook-form"
 import type { ProductFormValues } from "@/features/products/product-schema"
 
-type Props = { form: UseFormReturn<ProductFormValues> }
+type Props = {
+  form: UseFormReturn<ProductFormValues>
+}
 
 export function ProductGeneralInfoCard({ form }: Readonly<Props>) {
   return (
