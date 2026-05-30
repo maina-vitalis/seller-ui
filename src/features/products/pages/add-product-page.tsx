@@ -1,9 +1,10 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Loader2 } from "lucide-react"
 import { useForm, useWatch, type Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { ProductGeneralInfoCard } from "@/features/products/components/product-general-info-card"
 import { ProductImageUpload } from "@/features/products/components/product-image-upload"
 import { ProductPricingCard } from "@/features/products/components/product-pricing-card"
@@ -22,7 +23,6 @@ import {
 } from "@/features/products/product-schema"
 import { ProductInventoryCard } from "../components/product-inventory-card"
 import { useCreateProductMutation } from "../api/products-api"
-import { toFormData } from "axios"
 
 function generateSlug(name: string) {
   return name
@@ -64,13 +64,13 @@ export function AddProductPage() {
       seoSlug: "",
       isFeatured: false,
       isDigital: false,
+      storeId: "",
     },
   })
 
   const [tagInput, setTagInput] = React.useState("")
-
-  const [createProduct] = useCreateProductMutation()
-  const activeStoreId = localStorage.getItem("activeStoreId")
+  const [createProduct, { isLoading, isError, isSuccess, error }] =
+    useCreateProductMutation()
 
   /* auto-generate slug from name */
   const name = useWatch({ control: form.control, name: "name" })
@@ -88,12 +88,65 @@ export function AddProductPage() {
     name: "variantOptions",
   })
 
-  function onSubmit(data: ProductFormValues) {
-    const productFormData = toFormData({ ...data, storeId: activeStoreId })
+  const submitProduct = (status: ProductFormValues["status"]) => {
+    form.setValue("status", status, { shouldDirty: true })
 
-    console.log(productFormData)
-    createProduct(productFormData)
-    console.log("✅ Validated product data:", data)
+    void form.handleSubmit((data) => {
+      void onSubmit({ ...data, status })
+    })()
+  }
+
+  //Function to create a form Data
+  function newFormData(data: ProductFormValues) {
+    const formData = new FormData()
+
+    Object.entries(data).forEach(([key, val]) => {
+      if (typeof val === "string") {
+        formData.append(key, val)
+      } else if (typeof val === "number") {
+        formData.append(key, String(val))
+      } else if (typeof val === "boolean") {
+        formData.append(key, String(val))
+      } else if (Array.isArray(val)) {
+        if (key === "images") {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          val.forEach((image: any) => {
+            const actualFile = image.file || image
+
+            if (
+              actualFile &&
+              (actualFile instanceof File || actualFile.size > 0)
+            ) {
+              formData.append("images", actualFile)
+            }
+          })
+        } else {
+          val.forEach((item) => {
+            formData.append(key, String(item))
+          })
+        }
+      } else if (typeof val === "object") {
+        formData.append(key, JSON.stringify(val))
+      }
+    })
+
+    return formData
+  }
+
+  async function onSubmit(data: ProductFormValues) {
+    // const productFormData = toFormData({ ...data, storeId: activeStoreId })
+
+    const newObj = newFormData({
+      ...data,
+      storeId: localStorage.getItem("activeStoreId")!,
+    })
+
+    const uploadedFiles = newObj.getAll("images")
+    console.log(uploadedFiles)
+
+    console.log(newObj, "formData")
+
+    await createProduct(newObj)
   }
 
   return (
@@ -125,21 +178,45 @@ export function AddProductPage() {
               <Link to="/products">Discard</Link>
             </Button>
             <Button
-              type="submit"
+              type="button"
               variant="outline"
-              onClick={() => form.setValue("status", "DRAFT")}
+              onClick={() => submitProduct("DRAFT")}
+              disabled={isLoading}
             >
               Save as Draft
             </Button>
             <Button
-              type="submit"
-              onClick={() => form.setValue("status", "ACTIVE")}
+              type="button"
+              onClick={() => submitProduct("ACTIVE")}
+              disabled={isLoading}
             >
-              Publish Product
+              {isLoading ? (
+                <span>
+                  Saving
+                  <Loader2 className="animate-spin" />
+                </span>
+              ) : (
+                "Publish Product"
+              )}
             </Button>
           </div>
         </div>
       </div>
+
+      {(isSuccess || isError) && (
+        <Alert variant={isError ? "destructive" : "default"}>
+          <AlertTitle>
+            {isError ? "Product publish failed" : "Product saved"}
+          </AlertTitle>
+          <AlertDescription>
+            {isError
+              ? error && "data" in error && typeof error.data === "string"
+                ? error.data
+                : "Something went wrong while saving the product."
+              : "The product was saved successfully."}
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* ── two-column layout ── */}
       <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
@@ -191,17 +268,26 @@ export function AddProductPage() {
               <Link to="/products">Cancel</Link>
             </Button>
             <Button
-              type="submit"
+              type="button"
               variant="outline"
-              onClick={() => form.setValue("status", "DRAFT")}
+              onClick={() => submitProduct("DRAFT")}
+              disabled={isLoading}
             >
               Save Draft
             </Button>
             <Button
-              type="submit"
-              onClick={() => form.setValue("status", "ACTIVE")}
+              type="button"
+              onClick={() => submitProduct("ACTIVE")}
+              disabled={isLoading}
             >
-              Publish Product
+              {isLoading ? (
+                <span>
+                  Saving
+                  <Loader2 className="animate-spin" />
+                </span>
+              ) : (
+                "Publish Product"
+              )}
             </Button>
           </div>
         </div>

@@ -1,13 +1,15 @@
 import { baseApi } from "@/shared/api/base-api"
-import type { GenericFormData } from "axios"
 
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createProduct: builder.mutation<null, GenericFormData>({
-      query: (productData: GenericFormData) => ({
+    createProduct: builder.mutation<null, FormData>({
+      query: (productData: FormData) => ({
         url: "/product",
         method: "POST",
         data: productData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }),
     }),
   }),

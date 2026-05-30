@@ -35,6 +35,7 @@ export const productFormSchema = z
     /* identifiers */
     sku: z.string(),
     barcode: z.string(),
+    storeId: z.string(),
 
     /* organization */
     category: z.string().min(1, "Category is required"),
